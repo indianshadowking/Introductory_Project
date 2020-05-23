@@ -1,0 +1,13 @@
+.githubicon {
+    font-size: 2.25rem;
+    margin-left: 7px;
+}
+
+.githubicon1 {
+    color: black;
+}
+
+.githubicon1:hover {
+    color: black;
+    size: 3rem;
+}
