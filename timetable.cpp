@@ -47,8 +47,9 @@ void printdata(int data[][2],int total_subjects)
 
 void dataselection(int total_classes,int data_copy[][2],int total_subjects,int temp[][10])
 {
-	int i,j,pos;
-	for(i=0;i<class_per_day(data_copy,total_subjects);i++)
+	int i,j,pos,n;
+	n = class_per_day(data_copy,total_subjects);
+	for(i=0;i<n;i++)
 	{
 		for(j=0;j<=6;j++)
 		{
@@ -64,9 +65,9 @@ void dataselection(int total_classes,int data_copy[][2],int total_subjects,int t
 }
 int getmax(int data_copy[][2],int total_subjects)
 {
-	int i,high,pos;
+	int i,high,pos=0;
 	high=data_copy[0][1];
-	for(i=1;i<total_subjects;i++)
+	for(i=0;i<total_subjects;i++)
 	{
 		if(data_copy[i][1]>high)
 		{
@@ -78,15 +79,17 @@ int getmax(int data_copy[][2],int total_subjects)
 	if(high==0){
 		pos=-1;
 	}
+	//cout<<"\nThe returned Position is "<<pos<<endl;
 	return pos;
 }
 
 void printtable(int total_classes,int temp[][10],int total_subjects,int data[][2])
 {
-        int i,j;
+        int i,j,n;
+        n = class_per_day(data,total_subjects);
 	cout<<"\t\t\t\t\tTIME TABLE\n";
         cout<<"\t\tMONDAY   TUESDAY  WEDNESDAY   THURSDAY  FRIDAY   SATURDAY\n";
-        for(i=0;i<class_per_day(data,total_subjects);i++)
+        for(i=0;i<n;i++)
 	{
 		cout<<"Period : "<<i+1;
 		for(j=0;j<6;j++)
@@ -103,5 +106,6 @@ int class_per_day(int data_copy[][2],int total_subjects){
 	for(i=0;i<total_subjects;i++)
 		m+=data_copy[i][1];
 	m=(m/6)+1;
+	//cout<<"\n the value of m is "<<m<<endl;
 	return m;
 }
