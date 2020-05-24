@@ -28,10 +28,10 @@ int main(){
 	dataselection(data_copy,total_subjects,temp,name,temp_name);
 	while(n<100 && repeat_same_hour_check(temp,data,total_subjects))
 	{
-		
+		//printtable(time_table[pos],total_subjects,data,temp_name,pos);
 		copy(n,temp,time_table,total_subjects);
 		J_hist[n]=cost_compute(temp,total_subjects,data);
-                //cout<<"\nJ:"<<J_hist[n]<<endl;
+        //cout<<"\nJ:"<<J_hist[n]<<endl;
 		repeat_same_hour(temp,data,total_subjects,temp_name);
 		repeat_same_day(temp,data,total_subjects,temp_name);
 		n++;
@@ -145,6 +145,7 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
 	cout<<endl;
 }
 
+
 void repeat_same_hour(int temp[][10],int data[][2], int total_subjects,string temp_name[][10]){
 	int rows =  class_per_day(data,total_subjects);  
 	int i,j,k,l,tempo;
@@ -154,12 +155,12 @@ void repeat_same_hour(int temp[][10],int data[][2], int total_subjects,string te
 			for(k=j+1;k<6;k++){
 				if(temp[i][j]==temp[i][k]){
 					for(l=0;l<rows;l++){
-						if(l!=i){
-							if(temp[i][k]!=temp[l][k]){
-								tempo=temp[i][k];
-								stempo=temp_name[i][k];
-								temp[i][k]=temp[l][k];
-								temp_name[i][k]=temp_name[l][k];
+						if(l!=k){
+							if(temp[i][j]!=temp[l][k]){
+								tempo=temp[i][j];
+								stempo=temp_name[i][j];
+								temp[i][j]=temp[l][k];
+								temp_name[i][j]=temp_name[l][k];
 								temp[l][k]=tempo;
 								temp_name[l][k]=stempo;
 							}
@@ -182,8 +183,8 @@ void repeat_same_day(int temp[][10],int data[][2], int total_subjects,string tem
 					for(l=0;l<6;l++){
 						if(i!=l){
 							if(temp[k][i]!=temp[k][l]){
-								tempo=temp[k][l];
-								stempo=temp_name[k][l];
+								tempo=temp[k][i];
+								stempo=temp_name[k][i];
 								temp[k][i]=temp[k][l];
 								temp_name[k][i]=temp_name[k][l];
 								temp[k][l]=tempo;
@@ -218,7 +219,7 @@ int repeat_same_day_check(int temp[][10],int data[][2], int total_subjects){
 	int i,j,k,l,tempo;
 	for(i=0;i<6;i++){
 		for(j=0;j<rows;j++){
-			for(k=j+1;k<6;k++){
+			for(k=j+1;k<rows;k++){
 				if(temp[j][i]==temp[k][i]){
 					return 1;
 				}
