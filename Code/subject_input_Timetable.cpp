@@ -1,5 +1,6 @@
 #include<iostream>
 #include<iomanip>
+#include<fstream>
 using namespace std;
 void getdata(int [][2],int [][2], int,string [][2]);
 void printdata(int [][2],int,string [][2]);
@@ -46,7 +47,6 @@ int main(){
         }
 
 	printtable(time_table[pos],total_subjects,data,temp_name,pos);
-	
 	return 0;
 }
 void getdata(int data[][2],int data_copy[][2],int total_subjects,string name[][2])
@@ -127,18 +127,26 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
         int i,j,n;
         n = class_per_day(data,total_subjects);
 	pattern();
+	int m=class_per_day(data,total_subjects);
+	ofstream myfile;
+	myfile.open("time_table.csv");
+	myfile << endl;
        // cout<<"\n\t\t\t\t\tTIME TABLE "<<num<<endl;
 	cout<<"\n\t\t\t\t\tTIME TABLE "<<endl;
 	pattern();
+		myfile<<","<<"MONDAY"<<","<<"TUESDAY"<<","<<"WEDNESDAY"<<","<<"THURSDAY"<<","<<"FRIDAY"<<","<<"SATURDAY"<<endl;
         cout<<"\n\t\tMONDAY   TUESDAY  WEDNESDAY   THURSDAY  FRIDAY   SATURDAY\n";
         for(i=0;i<n;i++)
         {
                 cout<<"Period : "<<i+1;
+                myfile << "PERIOD : " << i+1 << ",";
                 for(j=0;j<6;j++)
                 {
                         cout<<setw(10)<<temp_name[i][j];
+                        myfile << temp_name[i][j] << ",";
 
                 }
+                myfile<<endl;
                 cout<<endl;
         }
 	pattern();
