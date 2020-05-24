@@ -42,7 +42,6 @@ void printdata(int data[][2],int total_subjects)
                 cout<<setw(14)<<data[i][0]<<setw(16)<<data[i][1]<<endl;
         }
 }
-
 void dataselection(int data_copy[][2],int total_subjects,int temp[][10])
 {
 	int i,j,pos,n;
@@ -87,7 +86,6 @@ int getmax(int data_copy[][2],int total_subjects)
 	}
 	return pos;
 }
-
 void printtable(int temp[][10],int total_subjects,int data[][2])
 {
         int i,j,n;
