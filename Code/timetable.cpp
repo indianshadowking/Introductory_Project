@@ -3,23 +3,21 @@
 using namespace std;
 void getdata(int [][2],int [][2], int);
 void printdata(int [][2],int);
-void dataselection(int ,int [][2],int,int [][10]);
+void dataselection(int [][2],int,int [][10]);
 int getmax(int [][2],int);
-void printtable(int ,int [][10],int,int [][2]);
+void printtable(int [][10],int,int [][2]);
 int class_per_day(int [][2],int);
 int main()
 {
-	int total_subjects,total_classes;
+	int total_subjects;
 	cout<<"Enter the total Number of Subjects\n";
 	cin>>total_subjects;
-	cout<<"Enter total classes per day\n";
-	cin>>total_classes;
 	int data[total_subjects][2],data_copy[total_subjects][2];
 	getdata(data,data_copy,total_subjects);
 	printdata(data,total_subjects);
-	int temp[total_classes][10];
-	dataselection(total_classes,data_copy,total_subjects,temp);
-	printtable(total_classes,temp,total_subjects,data);
+	int temp[total_subjects][10];
+	dataselection(data_copy,total_subjects,temp);
+	printtable(temp,total_subjects,data);
 	return 0;
 }
 void getdata(int data[][2],int data_copy[][2],int total_subjects)
@@ -31,7 +29,7 @@ void getdata(int data[][2],int data_copy[][2],int total_subjects)
 		cin>>data[i][0];
 		data_copy[i][0]=data[i][0];
 		cout<<"Enter the subject credits for subject "<<i+1<<endl;
-        cin>>data[i][1];
+	        cin>>data[i][1];
 		data_copy[i][1]=data[i][1];
 	}
 }
@@ -45,7 +43,7 @@ void printdata(int data[][2],int total_subjects)
         }
 }
 
-void dataselection(int total_classes,int data_copy[][2],int total_subjects,int temp[][10])
+void dataselection(int data_copy[][2],int total_subjects,int temp[][10])
 {
 	int i,j,pos,n;
 	n = class_per_day(data_copy,total_subjects);
@@ -63,6 +61,14 @@ void dataselection(int total_classes,int data_copy[][2],int total_subjects,int t
 	}
 			
 }
+int class_per_day(int data_copy[][2],int total_subjects)
+{
+        int i,m=0;
+        for(i=0;i<total_subjects;i++)
+                m+=data_copy[i][1];
+        m=(m/6)+1;
+        return m;
+}
 int getmax(int data_copy[][2],int total_subjects)
 {
 	int i,high,pos=0;
@@ -79,11 +85,10 @@ int getmax(int data_copy[][2],int total_subjects)
 	if(high==0){
 		pos=-1;
 	}
-	//cout<<"\nThe returned Position is "<<pos<<endl;
 	return pos;
 }
 
-void printtable(int total_classes,int temp[][10],int total_subjects,int data[][2])
+void printtable(int temp[][10],int total_subjects,int data[][2])
 {
         int i,j,n;
         n = class_per_day(data,total_subjects);
@@ -99,13 +104,4 @@ void printtable(int total_classes,int temp[][10],int total_subjects,int data[][2
         	}
 		cout<<endl;
 	}
-}
-
-int class_per_day(int data_copy[][2],int total_subjects){
-	int i,m=0;
-	for(i=0;i<total_subjects;i++)
-		m+=data_copy[i][1];
-	m=(m/6)+1;
-	//cout<<"\n the value of m is "<<m<<endl;
-	return m;
 }
