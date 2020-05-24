@@ -78,6 +78,7 @@ int getmax(int data_copy[][2],int total_subjects)
 	if(high==0){
 		pos=-1;
 	}
+	cout<<"\nThe returned Position is "<<pos<<endl;
 	return pos;
 }
 
