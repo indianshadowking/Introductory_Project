@@ -51,7 +51,7 @@ void dataselection(int total_classes,int data_copy[][2],int total_subjects,int t
 	n = class_per_day(data_copy,total_subjects);
 	for(i=0;i<n;i++)
 	{
-		for(j=0;j<6;j++)
+		for(j=0;j<=6;j++)
 		{
 			pos=getmax(data_copy,total_subjects);
 			if(pos==-1){
