@@ -5,14 +5,18 @@ void getdata(int [][2],int [][2], int,string [][2]);
 void printdata(int [][2],int,string [][2]);
 void dataselection(int [][2],int,int [][10],string [][2],string [][10]);
 int getmax(int [][2],int);
-void printtable(int,int [][2],string [][10]);
+void printtable(int [][10],int,int [][2],string [][10],int);
 int class_per_day(int [][2],int);
 void repeat_same_hour(int [][10],int [][2],int,string [][10]);
 void repeat_same_day(int [][10],int [][2],int,string [][10]);
 int repeat_same_hour_check(int [][10],int [][2], int );
 int repeat_same_day_check(int [][10],int [][2], int );
+int cost_compute(int [10][10],int,int [][2]);
+void copy(int, int [10][10], int [][10][10],int);
+void pattern();
 int main(){
-	int total_subjects,n=0;
+	int total_subjects,n=0,min,pos,i;
+	int J_hist[50];
 	cout<<"Enter the total Number of Subjects\n";
 	cin>>total_subjects;
 	int data[total_subjects][2],data_copy[total_subjects][2];
@@ -20,17 +24,29 @@ int main(){
 	getdata(data,data_copy,total_subjects,name);
 	printdata(data,total_subjects,name);
 	int temp[total_subjects][10];
+ 	int time_table[100][10][10];
 	dataselection(data_copy,total_subjects,temp,name,temp_name);
-	while(n<2 && repeat_same_hour_check(temp,data,total_subjects)){
+	while(n<100 && repeat_same_hour_check(temp,data,total_subjects))
+	{
+		
+		copy(n,temp,time_table,total_subjects);
+		J_hist[n]=cost_compute(temp,total_subjects,data);
+                //cout<<"\nJ:"<<J_hist[n]<<endl;
 		repeat_same_hour(temp,data,total_subjects,temp_name);
 		repeat_same_day(temp,data,total_subjects,temp_name);
 		n++;
 	}
-	printtable(total_subjects,data,temp_name);
-	int y = repeat_same_day_check(temp,data,total_subjects);
-	if(y==1){
-		cout<<"\nSome subject has occured on same day more than once\n";
-	}
+	min=J_hist[0];
+        pos=0;
+        for(i=0;i<100;i++){
+                if(J_hist[i]<=min){
+                        min=J_hist[i];
+                        pos=i;
+                }
+        }
+
+	printtable(time_table[pos],total_subjects,data,temp_name,pos);
+	
 	return 0;
 }
 void getdata(int data[][2],int data_copy[][2],int total_subjects,string name[][2])
@@ -106,28 +122,27 @@ int getmax(int data_copy[][2],int total_subjects)
 	return pos;
 }
 
-void printtable(int total_subjects,int data[][2],string temp_name[][10])
+void printtable(int time_table[][10],int total_subjects,int data[][2],string temp_name[][10],int num)
 {
         int i,j,n;
         n = class_per_day(data,total_subjects);
-	for(i=0;i<90;i++)
-		cout<<"*";
-	cout<<"\n\t\t\t\t\tTIME TABLE\n";
-	for(i=0;i<90;i++)
-                cout<<"*";
+	pattern();
+       // cout<<"\n\t\t\t\t\tTIME TABLE "<<num<<endl;
+	cout<<"\n\t\t\t\t\tTIME TABLE "<<endl;
+	pattern();
         cout<<"\n\t\tMONDAY   TUESDAY  WEDNESDAY   THURSDAY  FRIDAY   SATURDAY\n";
         for(i=0;i<n;i++)
-	{
-		cout<<"Period : "<<i+1;
-		for(j=0;j<6;j++)
-       		{
-               		cout<<setw(10)<<temp_name[i][j];
+        {
+                cout<<"Period : "<<i+1;
+                for(j=0;j<6;j++)
+                {
+                        cout<<setw(10)<<temp_name[i][j];
 
-        	}
-		cout<<endl;
-	}
-	
-
+                }
+                cout<<endl;
+        }
+	pattern();
+	cout<<endl;
 }
 
 void repeat_same_hour(int temp[][10],int data[][2], int total_subjects,string temp_name[][10]){
@@ -169,10 +184,8 @@ void repeat_same_day(int temp[][10],int data[][2], int total_subjects,string tem
 							if(temp[k][i]!=temp[k][l]){
 								tempo=temp[k][l];
 								stempo=temp_name[k][l];
-
 								temp[k][i]=temp[k][l];
 								temp_name[k][i]=temp_name[k][l];
-
 								temp[k][l]=tempo;
 								temp_name[k][l]=stempo;
 
@@ -213,4 +226,45 @@ int repeat_same_day_check(int temp[][10],int data[][2], int total_subjects){
 		}
 	}
 	return 0;
+}
+void copy(int i, int temp[10][10],int time_table[][10][10],int total_subjects){
+        int j,k;
+        for(j=0;j<total_subjects;j++){
+                for(k=0;k<6;k++){
+                        time_table[i][j][k]=temp[j][k];
+                }
+        }
+
+}
+
+int cost_compute(int temp[10][10],int total_subjects,int data[][2]){
+        int cost=0,i,j,k;
+        int rows =  class_per_day(data,total_subjects);
+        for(i=0;i<6;i++){
+                for(j=0;j<rows;j++){
+                        for(k=j+1;k<rows;k++){
+                                if(temp[j][i]==temp[k][i]){
+                                        cost+=2;
+                                }
+                        }
+                }
+        }
+        for(i=0;i<rows;i++){
+                for(j=0;j<6;j++){
+                        for(k=j+1;k<6;k++){
+                                if(temp[i][j]==temp[i][k]){
+                                        if(temp[i][j]!=0){
+                                                cost+=1;
+                                        }
+                                }
+                        }
+                }
+        }
+        return cost;
+}
+void pattern()
+{
+	int i;
+	for(i=0;i<90;i++)
+                cout<<"-";
 }
