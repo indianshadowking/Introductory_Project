@@ -8,9 +8,10 @@ int getmax(int [][2],int);
 void printtable(int [][10],int,int [][2]);
 int class_per_day(int [][2],int);
 void repeat_same_hour(int [][10],int [][2],int);
+void repeat_same_day(int [][10],int [][2],int);
 int repeat_same_hour_check(int [][10],int [][2], int );
-int main()
-{
+int repeat_same_day_check(int [][10],int [][2], int );
+int main(){
 	int total_subjects,n=0;
 	cout<<"Enter the total Number of Subjects\n";
 	cin>>total_subjects;
@@ -21,11 +22,14 @@ int main()
 	dataselection(data_copy,total_subjects,temp);
 	while(n<2 && repeat_same_hour_check(temp,data,total_subjects)){
 		repeat_same_hour(temp,data,total_subjects);
+		repeat_same_day(temp,data,total_subjects);
 		n++;
 	}
-	
-	//repeat_same_hour(temp,data,total_subjects);
 	printtable(temp,total_subjects,data);
+	int y = repeat_same_day_check(temp,data,total_subjects);
+	if(y==1){
+		cout<<"Some subject has occured on same day more than once\n";
+	}
 	return 0;
 }
 void getdata(int data[][2],int data_copy[][2],int total_subjects)
@@ -122,11 +126,33 @@ void repeat_same_hour(int temp[][10],int data[][2], int total_subjects){
 			for(k=j+1;k<6;k++){
 				if(temp[i][j]==temp[i][k]){
 					for(l=0;l<rows;l++){
-						if(l!=k){
-							if(temp[i][j]!=temp[l][k]){
-								tempo=temp[i][j];
-								temp[i][j]=temp[l][k];
+						if(l!=i){
+							if(temp[i][k]!=temp[l][k]){
+								tempo=temp[i][k];
+								temp[i][k]=temp[l][k];
 								temp[l][k]=tempo;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void repeat_same_day(int temp[][10],int data[][2], int total_subjects){
+	int rows =  class_per_day(data,total_subjects);  
+	int i,j,k,l,tempo;
+	for(i=0;i<6;i++){
+		for(j=0;j<rows;j++){
+			for(k=j+1;k<rows;k++){
+				if(temp[j][i]==temp[k][i]){
+					for(l=0;l<6;l++){
+						if(i!=l){
+							if(temp[k][i]!=temp[k][l]){
+								tempo=temp[k][l];
+								temp[k][i]=temp[k][l];
+								temp[k][l]=tempo;
 							}
 						}
 					}
@@ -143,6 +169,21 @@ int repeat_same_hour_check(int temp[][10],int data[][2], int total_subjects){
 		for(j=0;j<6;j++){
 			for(k=j+1;k<6;k++){
 				if(temp[i][j]==temp[i][k]){
+					return 1;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+int repeat_same_day_check(int temp[][10],int data[][2], int total_subjects){
+	int rows =  class_per_day(data,total_subjects);  
+	int i,j,k,l,tempo;
+	for(i=0;i<6;i++){
+		for(j=0;j<rows;j++){
+			for(k=j+1;k<6;k++){
+				if(temp[j][i]==temp[k][i]){
 					return 1;
 				}
 			}
