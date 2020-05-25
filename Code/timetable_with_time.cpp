@@ -4,12 +4,12 @@
 using namespace std;
 void getdata(int [][2],int [][2], int,string [][2]);
 void printdata(int [][2],int,string [][2]);
-void dataselection(int [][2],int,int [][10],string [][2],string [][10]);
+void dataselection(int [][2],int,int [][10],string [][2],string [][10],string [][10]);
 int getmax(int [][2],int);
-void printtable(int [][10],int,int [][2],string [][10],int,int,int);
+void printtable(int [][10],int,int [][2],string [][10],int,int,int,string [][10]);
 int class_per_day(int [][2],int);
-void repeat_same_hour(int [][10],int [][2],int,string [][10]);
-void repeat_same_day(int [][10],int [][2],int,string [][10]);
+void repeat_same_hour(int [][10],int [][2],int,string [][10],string [][10]);
+void repeat_same_day(int [][10],int [][2],int,string [][10],string [][10]);
 int repeat_same_hour_check(int [][10],int [][2], int );
 int repeat_same_day_check(int [][10],int [][2], int );
 int cost_compute(int [10][10],int,int [][2]);
@@ -26,18 +26,18 @@ int main(){
 	cout<<"Enter the duration of each Period\n";
 	cin>>duration;
 	int data[total_subjects][2],data_copy[total_subjects][2];
-	string name[total_subjects][2],temp_name[total_subjects][10];
+	string name[total_subjects][2],temp_name[total_subjects][10],teacher_name[total_subjects][10];
 	getdata(data,data_copy,total_subjects,name);
 	printdata(data,total_subjects,name);
 	int temp[total_subjects][10];
  	int time_table[100][10][10];
-	dataselection(data_copy,total_subjects,temp,name,temp_name);
+	dataselection(data_copy,total_subjects,temp,name,temp_name,teacher_name);
 	while(n<100 && repeat_same_hour_check(temp,data,total_subjects))
 	{
 		copy(n,temp,time_table,total_subjects);
 		J_hist[n]=cost_compute(temp,total_subjects,data);
-		repeat_same_hour(temp,data,total_subjects,temp_name);
-		repeat_same_day(temp,data,total_subjects,temp_name);
+		repeat_same_hour(temp,data,total_subjects,temp_name,teacher_name);
+		repeat_same_day(temp,data,total_subjects,temp_name,teacher_name);
 		n++;
 	}
 	min=J_hist[0];
@@ -49,7 +49,7 @@ int main(){
                 }
         }
 
-	printtable(time_table[pos],total_subjects,data,temp_name,pos,time,duration);
+	printtable(time_table[pos],total_subjects,data,temp_name,pos,time,duration,teacher_name);
 	return 0;
 }
 void getdata(int data[][2],int data_copy[][2],int total_subjects,string name[][2])
@@ -63,22 +63,25 @@ void getdata(int data[][2],int data_copy[][2],int total_subjects,string name[][2
 		data_copy[i][0]=data[i][0];
 		cout<<"Enter the Subject name\n";
 		cin>>name[i][0];
+		cout<<"Enter the name of Teacher\n";
+		cin>>name[i][1];
 		cout<<"Enter the credits of subject "<<name[i][0]<<endl;
 	        cin>>data[i][1];
 		data_copy[i][1]=data[i][1];
+		cout<<endl;
 	}
 }
 void printdata(int data[][2],int total_subjects,string name[][2])
 {       
 	int i;
-	cout<<"\tSUBJECTS_CODE\tSUBJECT_CREDIT\tSUBJECT_NAME\n";
+	cout<<"\tSUBJECTS_CODE\tSUBJECT_CREDIT\tSUBJECT_NAME\t  SUBJECT_TEACHER\n";
         for(i=0;i<total_subjects;i++)
         {       
-                cout<<setw(14)<<data[i][0]<<setw(16)<<data[i][1]<<setw(19)<<name[i][0]<<endl;
+                cout<<setw(14)<<data[i][0]<<setw(16)<<data[i][1]<<setw(19)<<name[i][0]<<setw(20)<<name[i][1]<<endl;
         }
 }
 
-void dataselection(int data_copy[][2],int total_subjects,int temp[][10],string name[][2],string temp_name[][10])
+void dataselection(int data_copy[][2],int total_subjects,int temp[][10],string name[][2],string temp_name[][10],string teacher_name[][10])
 {
 	int i,j,pos,n;
 	n = class_per_day(data_copy,total_subjects);
@@ -94,6 +97,7 @@ void dataselection(int data_copy[][2],int total_subjects,int temp[][10],string n
 			{
 			temp[i][j]=data_copy[pos][0];
 			temp_name[i][j]=name[pos][0];
+			teacher_name[i][j]=name[pos][1];
 			}
 		}
 	}
@@ -126,7 +130,7 @@ int getmax(int data_copy[][2],int total_subjects)
 	return pos;
 }
 
-void printtable(int time_table[][10],int total_subjects,int data[][2],string temp_name[][10],int num,int time,int duration)
+void printtable(int time_table[][10],int total_subjects,int data[][2],string temp_name[][10],int num,int time,int duration,string teacher_name[][10])
 {
         int i,j,n,cnt=0;
         n = class_per_day(data,total_subjects);
@@ -135,7 +139,7 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
 	ofstream myfile;
 	myfile.open("time_table.csv");
 	myfile << endl;
-	cout<<"\n\n\t\t\t\t\tTIME TABLE "<<endl;
+	cout<<"\n\t\t\t\t\tTIME TABLE "<<endl;
 	pattern();
 		myfile<<","<<"MONDAY"<<","<<"TUESDAY"<<","<<"WEDNESDAY"<<","<<"THURSDAY"<<","<<"FRIDAY"<<","<<"SATURDAY"<<endl;
         cout<<"\n\t\t  MONDAY   TUESDAY   WEDNESDAY   THURSDAY   FRIDAY   SATURDAY\n";
@@ -148,9 +152,16 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
                 for(j=0;j<6;j++)
                 {
                         cout<<setw(11)<<temp_name[i][j];
-                        myfile << temp_name[i][j] << ",";
+			myfile << temp_name[i][j] << ",";
 
                 }
+		cout<<endl;
+		cout<<"Lecturer :";
+		for(j=0;j<6;j++)
+                {
+                        cout<<setw(11)<<teacher_name[i][j];
+		}
+		cout<<endl;
 		if(i==1 && n>2)
                 {
                                 cout<<endl;
@@ -180,10 +191,10 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
 }
 
 
-void repeat_same_hour(int temp[][10],int data[][2], int total_subjects,string temp_name[][10]){
+void repeat_same_hour(int temp[][10],int data[][2], int total_subjects,string temp_name[][10],string teacher_name[][10]){
 	int rows =  class_per_day(data,total_subjects);  
 	int i,j,k,l,tempo;
-	string stempo;
+	string stempo,ttempo;			//stempo----> subject temporary   and  ttempo----> teacher temporary
 	for(i=0;i<rows-1;i++){
 		for(j=0;j<6;j++){
 			for(k=j+1;k<6;k++){
@@ -193,10 +204,15 @@ void repeat_same_hour(int temp[][10],int data[][2], int total_subjects,string te
 							if(temp[i][j]!=temp[l][k]){
 								tempo=temp[i][j];
 								stempo=temp_name[i][j];
+								ttempo=teacher_name[i][j];
+								
 								temp[i][j]=temp[l][k];
 								temp_name[i][j]=temp_name[l][k];
+								teacher_name[i][j]=teacher_name[l][k];
+
 								temp[l][k]=tempo;
 								temp_name[l][k]=stempo;
+								teacher_name[l][k]=ttempo;
 							}
 						}
 					}
@@ -206,10 +222,10 @@ void repeat_same_hour(int temp[][10],int data[][2], int total_subjects,string te
 	}
 }
 
-void repeat_same_day(int temp[][10],int data[][2], int total_subjects,string temp_name[][10]){
+void repeat_same_day(int temp[][10],int data[][2], int total_subjects,string temp_name[][10],string teacher_name[][10]){
 	int rows =  class_per_day(data,total_subjects);  
 	int i,j,k,l,tempo;
-	string stempo;
+	string stempo,ttempo;				//stempo----> subject temporary   and  ttempo----> teacher temporary
 	for(i=0;i<6;i++){
 		for(j=0;j<rows;j++){
 			for(k=j+1;k<rows;k++){
@@ -219,10 +235,17 @@ void repeat_same_day(int temp[][10],int data[][2], int total_subjects,string tem
 							if(temp[k][i]!=temp[k][l]){
 								tempo=temp[k][i];
 								stempo=temp_name[k][i];
+								ttempo=teacher_name[k][i];
+
 								temp[k][i]=temp[k][l];
 								temp_name[k][i]=temp_name[k][l];
+								teacher_name[k][i]=teacher_name[k][l];
+
+				
 								temp[k][l]=tempo;
 								temp_name[k][l]=stempo;
+								teacher_name[k][l]=ttempo;
+
 
 							}
 						}
@@ -305,15 +328,8 @@ void pattern()
 }
 void select_time(int time,int duration,int cnt)
 {
-
-		 if( cnt==0)
-                {
+		if( cnt==0)
                         cout<<"["<<time<<" to "<<time+duration<<"]";
-                }
                 if(cnt == 1)
-                {
                         cout<<"["<<time<<":30"<<" to "<<time+1<<":30]";
-                }
-
-
 }
