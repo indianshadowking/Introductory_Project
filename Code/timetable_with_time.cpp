@@ -129,7 +129,6 @@ int getmax(int data_copy[][2],int total_subjects)
 	}
 	return pos;
 }
-
 void printtable(int time_table[][10],int total_subjects,int data[][2],string temp_name[][10],int num,int time,int duration,string teacher_name[][10])
 {
         int i,j,n,cnt=0;
