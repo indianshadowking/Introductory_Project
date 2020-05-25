@@ -2,6 +2,7 @@
 #include<iomanip>
 #include<fstream>
 using namespace std;
+
 void getdata(int [][2],int [][2], int,string [][2]);
 void printdata(int [][2],int,string [][2]);
 void dataselection(int [][2],int,int [][10],string [][2],string [][10],string [][10]);
@@ -16,6 +17,7 @@ int cost_compute(int [10][10],int,int [][2]);
 void copy(int, int [10][10], int [][10][10],int);
 void pattern();
 void select_time(int,int,int);
+
 int main(){
 	int total_subjects,n=0,min,pos,i,duration,time;
 	int J_hist[50];
@@ -52,6 +54,7 @@ int main(){
 	printtable(time_table[pos],total_subjects,data,temp_name,pos,time,duration,teacher_name);
 	return 0;
 }
+
 void getdata(int data[][2],int data_copy[][2],int total_subjects,string name[][2])
 {
 	int i;
@@ -66,11 +69,12 @@ void getdata(int data[][2],int data_copy[][2],int total_subjects,string name[][2
 		cout<<"Enter the name of Teacher\n";
 		cin>>name[i][1];
 		cout<<"Enter the credits of subject "<<name[i][0]<<endl;
-	        cin>>data[i][1];
+	    cin>>data[i][1];
 		data_copy[i][1]=data[i][1];
 		cout<<endl;
 	}
 }
+
 void printdata(int data[][2],int total_subjects,string name[][2])
 {       
 	int i;
@@ -103,14 +107,16 @@ void dataselection(int data_copy[][2],int total_subjects,int temp[][10],string n
 	}
 			
 }
+
 int class_per_day(int data_copy[][2],int total_subjects)
 {
         int i,m=0;
         for(i=0;i<total_subjects;i++)
-                m+=data_copy[i][1];
+            m+=data_copy[i][1];
         m=(m/6)+1;
         return m;
 }
+
 int getmax(int data_copy[][2],int total_subjects)
 {
 	int i,high,pos=0;
@@ -129,10 +135,11 @@ int getmax(int data_copy[][2],int total_subjects)
 	}
 	return pos;
 }
+
 void printtable(int time_table[][10],int total_subjects,int data[][2],string temp_name[][10],int num,int time,int duration,string teacher_name[][10])
 {
-        int i,j,n,cnt=0;
-        n = class_per_day(data,total_subjects);
+    int i,j,n,cnt=0;
+    n = class_per_day(data,total_subjects);
 	pattern();
 	int m=class_per_day(data,total_subjects);
 	ofstream myfile;
@@ -140,47 +147,56 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
 	myfile << endl;
 	cout<<"\n\t\t\t\t\tTIME TABLE "<<endl;
 	pattern();
-		myfile<<","<<"MONDAY"<<","<<"TUESDAY"<<","<<"WEDNESDAY"<<","<<"THURSDAY"<<","<<"FRIDAY"<<","<<"SATURDAY"<<endl;
-        cout<<"\n\t\t  MONDAY   TUESDAY   WEDNESDAY   THURSDAY   FRIDAY   SATURDAY\n";
+	myfile<<","<<"MONDAY"<<","<<"TUESDAY"<<","<<"WEDNESDAY"<<","<<"THURSDAY"<<","<<"FRIDAY"<<","<<"SATURDAY"<<endl;
+    cout<<"\n\t\t  MONDAY   TUESDAY   WEDNESDAY   THURSDAY   FRIDAY   SATURDAY\n";
         for(i=0;i<n;i++)
         {
-		select_time(time,duration,cnt);
-                time++;
-                cout<<"\nPeriod : "<<i+1;
-                myfile << "PERIOD : " << i+1 << ",";
-                for(j=0;j<6;j++)
+			select_time(time,duration,cnt);
+			myfile<<endl<< "["<<time<<" to "<<time+duration<<"]"<<endl;
+            time++;
+            cout<<"\nPeriod : "<<i+1;
+            myfile << "PERIOD : " << i+1 << ",";
+            for(j=0;j<6;j++)
+            {
+             	cout<<setw(11)<<temp_name[i][j];
+				myfile << temp_name[i][j] << ",";
+            }
+			cout<<endl;
+			myfile<<endl;
+			cout<<"Lecturer :";
+			myfile<<"Lecturer: "<<",";
+			for(j=0;j<6;j++)
+        		{
+        	        cout<<setw(11)<<teacher_name[i][j];
+        	        myfile<<teacher_name[i][j]<<",";
+				}
+			cout<<endl;
+			myfile<<endl;
+			if(i==1 && n>2)
                 {
-                        cout<<setw(11)<<temp_name[i][j];
-			myfile << temp_name[i][j] << ",";
-
-                }
-		cout<<endl;
-		cout<<"Lecturer :";
-		for(j=0;j<6;j++)
-                {
-                        cout<<setw(11)<<teacher_name[i][j];
-		}
-		cout<<endl;
-		if(i==1 && n>2)
-                {
-                                cout<<endl;
-                                pattern();
-                                cout<<"\n\t\t\t\tSHORT BREAK";
-				cout<<" ["<<time<<" to "<<time<<":30]";
+                    cout<<endl;
+                    pattern();
+                    cout<<"\n\t\t\t\tSHORT BREAK";
+                    myfile<<endl<<" ["<<time<<" to "<<time<<":30]"<<",";
+                    myfile<<"SHORT BREAK"<<","<<"SHORT BREAK"<<","<<"SHORT BREAK"<<","<<"SHORT BREAK";
+                    myfile<<","<<"SHORT BREAK"<<","<<"SHORT BREAK"<<endl;
+					cout<<" ["<<time<<" to "<<time<<":30]";
 			        cnt=1;
-				cout<<endl;
-                                pattern();
+					cout<<endl;
+                    pattern();
                 }
-
                 if(i==3 && n>4)
                 {
-                                cout<<endl;
-                                pattern();
-                                cout<<"\n\t\t\t\tLUNCH BREAK";
-                                cout<<" ["<<time<<" to "<<time<<":30]";
-				cnt=1;
-				cout<<endl;
-				pattern();
+                    cout<<endl;
+					pattern();
+					cout<<"\n\t\t\t\tLUNCH BREAK";
+					myfile<<endl<<" ["<<time<<" to "<<time<<":30]"<<",";
+					myfile<<","<<"LUNCH BREAK"<<","<<"LUNCH BREAK"<<","<<"LUNCH BREAK"<<","<<"LUNCH BREAK";
+					myfile<<","<<"LUNCH BREAK"<<","<<"LUNCH BREAK"<<endl;
+					cout<<" ["<<time<<" to "<<time<<":30]";
+					cnt=1;
+					cout<<endl;
+					pattern();
                 }
                 myfile<<endl;
                 cout<<endl;
@@ -188,7 +204,6 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
 	pattern();
 	cout<<endl;
 }
-
 
 void repeat_same_hour(int temp[][10],int data[][2], int total_subjects,string temp_name[][10],string teacher_name[][10]){
 	int rows =  class_per_day(data,total_subjects);  
@@ -244,8 +259,6 @@ void repeat_same_day(int temp[][10],int data[][2], int total_subjects,string tem
 								temp[k][l]=tempo;
 								temp_name[k][l]=stempo;
 								teacher_name[k][l]=ttempo;
-
-
 							}
 						}
 					}
@@ -284,51 +297,56 @@ int repeat_same_day_check(int temp[][10],int data[][2], int total_subjects){
 	}
 	return 0;
 }
+
 void copy(int i, int temp[10][10],int time_table[][10][10],int total_subjects){
-        int j,k;
-        for(j=0;j<total_subjects;j++){
-                for(k=0;k<6;k++){
-                        time_table[i][j][k]=temp[j][k];
-                }
+    int j,k;
+    for(j=0;j<total_subjects;j++){
+        for(k=0;k<6;k++){
+            time_table[i][j][k]=temp[j][k];
         }
+    }
 
 }
 
 int cost_compute(int temp[10][10],int total_subjects,int data[][2]){
-        int cost=0,i,j,k;
-        int rows =  class_per_day(data,total_subjects);
-        for(i=0;i<6;i++){
-                for(j=0;j<rows;j++){
-                        for(k=j+1;k<rows;k++){
-                                if(temp[j][i]==temp[k][i]){
-                                        cost+=2;
-                                }
-                        }
+    int cost=0,i,j,k;
+    int rows =  class_per_day(data,total_subjects);
+    for(i=0;i<6;i++){
+        for(j=0;j<rows;j++){
+            for(k=j+1;k<rows;k++){
+                if(temp[j][i]==temp[k][i]){
+                    cost+=2;
                 }
+            }
         }
-        for(i=0;i<rows;i++){
-                for(j=0;j<6;j++){
-                        for(k=j+1;k<6;k++){
-                                if(temp[i][j]==temp[i][k]){
-                                        if(temp[i][j]!=0){
-                                                cost+=1;
-                                        }
-                                }
-                        }
+    }
+    for(i=0;i<rows;i++){
+        for(j=0;j<6;j++){
+            for(k=j+1;k<6;k++){
+                if(temp[i][j]==temp[i][k]){
+                    if(temp[i][j]!=0){
+                       cost+=1;
+                    }
                 }
+            }
         }
-        return cost;
+    }
+    return cost;
 }
+
 void pattern()
 {
 	int i;
 	for(i=0;i<90;i++)
                 cout<<"-";
 }
+
 void select_time(int time,int duration,int cnt)
 {
-		if( cnt==0)
-                        cout<<"["<<time<<" to "<<time+duration<<"]";
-                if(cnt == 1)
-                        cout<<"["<<time<<":30"<<" to "<<time+1<<":30]";
+	if( cnt==0)
+        cout<<"["<<time<<" to "<<time+duration<<"]";
+                    	
+    if(cnt == 1)
+        cout<<"["<<time<<":30"<<" to "<<time+1<<":30]";
+     	//myfile<< "["<<time<<":30"<<" to "<<time+1<<":30]"<<endl;	
 }
