@@ -59,7 +59,7 @@ void getdata(int data[][2],int data_copy[][2],int total_subjects,string name[][2
 		data_copy[i][0]=data[i][0];
 		cout<<"Enter the Subject name\n";
 		cin>>name[i][0];
-		cout<<"Enter the subject credits for subject "<<i+1<<endl;
+		cout<<"Enter the credits of subject "<<name[i][0]<<endl;
 	        cin>>data[i][1];
 		data_copy[i][1]=data[i][1];
 	}
@@ -138,6 +138,7 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
         cout<<"\n\t\tMONDAY   TUESDAY  WEDNESDAY   THURSDAY  FRIDAY   SATURDAY\n";
         for(i=0;i<n;i++)
         {
+	//	cout<<"n= "<<n<<endl;
                 cout<<"Period : "<<i+1;
                 myfile << "PERIOD : " << i+1 << ",";
                 for(j=0;j<6;j++)
@@ -145,6 +146,22 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
                         cout<<setw(10)<<temp_name[i][j];
                         myfile << temp_name[i][j] << ",";
 
+                }
+		//cout<<"i= "<<i<<endl;
+		if(i==1 && n>2)
+                {
+                                cout<<endl;
+                                pattern();
+                                cout<<"\n\t\t\t\t\tSHORT BREAK"<<endl;;
+                                pattern();
+                }
+
+                if(i==3 && n>4)
+                {
+                                cout<<endl;
+                                pattern();
+                                cout<<"\n\t\t\t\t\tLUNCH BREAK"<<endl;;
+                                pattern();
                 }
                 myfile<<endl;
                 cout<<endl;
