@@ -16,7 +16,6 @@ int repeat_same_day_check(int [][10],int [][2], int );
 int cost_compute(int [10][10],int,int [][2]);
 void copy(int, int [10][10], int [][10][10],int);
 void pattern();
-void select_time(int,int,int);
 
 int main(){
 	int total_subjects,n=0,min,pos,i,duration,time;
@@ -151,15 +150,24 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
     cout<<"\n\t\t  MONDAY   TUESDAY   WEDNESDAY   THURSDAY   FRIDAY   SATURDAY\n";
         for(i=0;i<n;i++)
         {
-			select_time(time,duration,cnt);
-			myfile<<endl<< "["<<time<<" to "<<time+duration<<"]"<<endl;
-            time++;
-            cout<<"\nPeriod : "<<i+1;
+	    if( cnt==0)
+	    {
+		    cout<<"["<<time<<" to "<<time+duration<<"]";
+		    myfile<<endl<< "["<<time<<" to "<<time+duration<<"]"<<endl;
+            	    time++;
+	    }
+	    if(cnt == 1)
+	    {
+		cout<<"["<<time<<":30"<<" to "<<time+1<<":30]";
+     		myfile<< "["<<time<<":30"<<" to "<<time+1<<":30]"<<endl;
+		time++;
+	    }
+	    cout<<"\nPeriod : "<<i+1;
             myfile << "PERIOD : " << i+1 << ",";
             for(j=0;j<6;j++)
             {
              	cout<<setw(11)<<temp_name[i][j];
-				myfile << temp_name[i][j] << ",";
+		myfile << temp_name[i][j] << ",";
             }
 			cout<<endl;
 			myfile<<endl;
@@ -190,10 +198,11 @@ void printtable(int time_table[][10],int total_subjects,int data[][2],string tem
                     cout<<endl;
 					pattern();
 					cout<<"\n\t\t\t\tLUNCH BREAK";
-					myfile<<endl<<" ["<<time<<" to "<<time<<":30]"<<",";
+					myfile<<endl<<" ["<<time<<":30"<<" to "<<time+1<<":30]";
 					myfile<<","<<"LUNCH BREAK"<<","<<"LUNCH BREAK"<<","<<"LUNCH BREAK"<<","<<"LUNCH BREAK";
 					myfile<<","<<"LUNCH BREAK"<<","<<"LUNCH BREAK"<<endl;
-					cout<<" ["<<time<<" to "<<time<<":30]";
+					cout<<" ["<<time<<":30"<<" to "<<time+1<<":30]";
+					time++;
 					cnt=1;
 					cout<<endl;
 					pattern();
@@ -339,14 +348,4 @@ void pattern()
 	int i;
 	for(i=0;i<90;i++)
                 cout<<"-";
-}
-
-void select_time(int time,int duration,int cnt)
-{
-	if( cnt==0)
-        cout<<"["<<time<<" to "<<time+duration<<"]";
-                    	
-    if(cnt == 1)
-        cout<<"["<<time<<":30"<<" to "<<time+1<<":30]";
-     	//myfile<< "["<<time<<":30"<<" to "<<time+1<<":30]"<<endl;	
 }
