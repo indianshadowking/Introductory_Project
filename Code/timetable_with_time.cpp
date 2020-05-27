@@ -20,11 +20,11 @@ void pattern();
 int main(){
 	int total_subjects,n=0,min,pos,i,duration,time;
 	int J_hist[150];
-	cout<<"Enter the total Number of Subjects\n";
+	cout<<" Enter the total Number of Subjects\n ";
 	cin>>total_subjects;
-	cout<<"Enter the starting time of Regular class\n";
+	cout<<" Enter the starting time of Regular class\n ";
 	cin>>time;
-	cout<<"Enter the duration of each Period\n";
+	cout<<" Enter the duration of each Period\n ";
 	cin>>duration;
 	int data[total_subjects][2],data_copy[total_subjects][2];
 	string name[total_subjects][2],temp_name[total_subjects][10],teacher_name[total_subjects][10];
@@ -60,14 +60,14 @@ void getdata(int data[][2],int data_copy[][2],int total_subjects,string name[][2
 	cout<<"\n\t\t\tEnter the details of "<<total_subjects<<"  subjects\n";
 	for(i=0;i<total_subjects;i++)
 	{
-		cout<<"Enter the subject code for subject "<<i+1<<endl;
+		cout<<"   Enter the subject code for subject "<<i+1<<endl<<"   ";
 		cin>>data[i][0];
 		data_copy[i][0]=data[i][0];
-		cout<<"Enter the Subject name\n";
+		cout<<"   Enter the Subject name\n   ";
 		cin>>name[i][0];
-		cout<<"Enter the name of Teacher\n";
+		cout<<"   Enter the name of Teacher\n   ";
 		cin>>name[i][1];
-		cout<<"Enter the credits of subject "<<name[i][0]<<endl;
+		cout<<"   Enter the credits of subject "<<name[i][0]<<endl<<"   ";
 	    cin>>data[i][1];
 		data_copy[i][1]=data[i][1];
 		cout<<endl;
