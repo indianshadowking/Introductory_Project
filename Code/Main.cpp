@@ -1,68 +1,46 @@
 #include<iostream>
 #include<iomanip>
+#include<fstream>
+#include "header/data.h"
+#include "header/costcompute.h"
+#include "header/print.h"
+#include "header/hour.h"
+#include "header/day.h"
+
 using namespace std;
 
-void getdata(int [][2],int);
-void printdata(int [][2],int);
-void filldata(int [][2],int [][7], int,int);
-void print_table(int [][7],int);
-
 int main(){
-    int H=-1,M=0,i;
-    while (!(H>0 && H<=25))
-    {
-    cout<<"Enter the number of Subjects(between 0 to 25): ";
-    cin>>H;
-    }
-    int I[H][2];
-    getdata(I,H);
-    printdata(I,H);
-    for(i=0;i<H;i++)
-    M+=I[i][1];
-    M=M/6+1;
-    int T[6][7];
-    filldata(I,T,M,H);
-    print_table(T,M);
-    return 0;
-}
-
-void getdata(int I[][2],int a){
-    for(int i=0;i<a;i++){
-        cout<<"Enter Subject Code: ";
-        cin>>I[i][0];
-        cout<<"Enter the number of credits: ";
-        cin>>I[i][1];
-    }
-}
-
-void printdata(int I[][2],int a){
-    cout<<"SUBJECT_CODE \t CREDITS\n";
-    for(int i=0;i<a;i++){
-        cout<<setw(8)<<I[i][0]<<setw(13)<<I[i][1]<<endl;
-    }
-}
-
-void filldata(int I[][2],int T[][7],int a,int h){
-    int i,j,l=0,m=0;
-    for(i=0;i<h;i++){
-        for(j=0;j<I[i][1];j++){
-            T[l][m]=I[i][0];
-            m++;
-            if(m>a){
-                m=0;
-                l++;
+	int total_subjects,n=0,min,pos,i,duration,time,temp[total_subjects][10],time_table[150][10][10];
+	int J_hist[150];
+	cout<<" Enter the total Number of Subjects\n ";
+	cin>>total_subjects;
+	cout<<" Enter the starting time of Regular class\n ";
+	cin>>time;
+	cout<<" Enter the duration of each Period\n ";
+	cin>>duration;
+	int data[total_subjects][2],data_copy[total_subjects][2];
+	string name[total_subjects][2],temp_name[total_subjects][10],teacher_name[total_subjects][10];
+	getdata(data,data_copy,total_subjects,name);
+	printdata(data,total_subjects,name);
+	dataselection(data_copy,total_subjects,temp,name,temp_name,teacher_name);
+	while(n<150 && repeat_same_hour_check(temp,data,total_subjects) && repeat_same_day_check(temp,data,total_subjects))
+	{
+		copy(n,temp,time_table,total_subjects);
+		J_hist[n]=cost_compute(temp,total_subjects,data);
+		repeat_same_hour(temp,data,total_subjects,temp_name,teacher_name);
+		repeat_same_day(temp,data,total_subjects,temp_name,teacher_name);
+		n++;
+	}
+	min=J_hist[0];
+        pos=0;
+        for(i=0;i<n+1;i++){
+            if(J_hist[i]<=min){
+                min=J_hist[i];
+                pos=i;
             }
         }
-    }
+
+	printtable(time_table[pos],total_subjects,data,temp_name,pos,time,duration,teacher_name);
+	return 0;
 }
 
-void print_table(int T[][7],int a){
-    int i,j;
-    cout<<"Per1 Per2 Per3 Per4 Per5 Per6 Per7"<<endl;
-    for(i=0;i<6;i++){
-        for(j=0;j<a;j++){
-            cout<<T[i][j]<<setw(5);
-        }
-        cout<<endl;
-    }  
-}
